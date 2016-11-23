@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(PictureActivity.INTENT_KEY_ENABLE_CUSCOMPRESS,true);
                 //限制最大宽高 单位PX
                 intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,600);
-
+                //限制压缩后文件大小 建议不设置
+                //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXSIZE,2*1024);
                 startActivityForResult(intent, AVATAR_REQUEST_CODE);
 
             }
