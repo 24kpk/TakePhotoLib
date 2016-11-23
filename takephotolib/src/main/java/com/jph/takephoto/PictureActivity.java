@@ -238,6 +238,7 @@ public class PictureActivity extends TakePhotoActivity {
                         String title = getResources().getString(R.string.tip_tips);
                         mProgressDialog = new ProgressDialog(PictureActivity.this);
                         mProgressDialog.setTitle(title);
+                        mProgressDialog.setMessage(getResources().getString(R.string.tip_compress));
                         mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                     }

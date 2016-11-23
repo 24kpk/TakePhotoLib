@@ -40,6 +40,7 @@ public class CompressImpl {
     }
 
     public void startCompress(){
+        if (mCompressListener != null) mCompressListener.onStart();
         Observable.just(new File(mCompressParams.getLargeImagePath()))
                 .map(new Func1<File, File>() {
                     @Override
