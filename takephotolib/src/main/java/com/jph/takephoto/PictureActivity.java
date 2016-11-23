@@ -1,15 +1,21 @@
 package com.jph.takephoto;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
-import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.compress_cus.CompressImpl;
+import com.jph.takephoto.compress_cus.CompressListener;
+import com.jph.takephoto.compress_cus.CompressParams;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.uitl.ImgTypeUtils;
@@ -25,6 +31,7 @@ import java.io.File;
  * 注意：必须指定输出的文件夹路径 文件名默认为  photoTmpPath + System.currentTimeMillis() + ImgTypeUtils.IMG_TYPE_JPG
  */
 public class PictureActivity extends TakePhotoActivity {
+    private String TAG = PictureActivity.class.getSimpleName();
     /**
      * 类型String
      * 必须传入文件路径 @LIKE String TEMP_FILE_PATH = String.format("%stemp/", ROOT_PATH)
@@ -86,9 +93,15 @@ public class PictureActivity extends TakePhotoActivity {
     public static final String INTENT_KEY_COMPRESS_PHOTO = "intent_key_compress_photo";
 
     /**
+     * 是否需要自定义压缩
+     * 自定义压缩才可传入压缩参数
+     */
+    public static final String INTENT_KEY_ENABLE_CUSCOMPRESS = "intent_key_enable_cuscompress";
+
+    /**
      * 压缩参数
-     * 默认 maxSizeCompress = 2 * 1024 * 1024; //设置文件质量限制2M setMaxSize(maxSize) 传入参数单位B
-     * 默认 maxPixelCompress = 540;//宽高不超过maxPixel px
+     * 默认 maxSizeCompress = -1; //设置文件质量限制2M setMaxSize(maxSize) 传入参数单位KB
+     * 默认 maxPixelCompress = -1 ;//宽高不超过maxPixel px
      */
     public static final String INTENT_KEY_COMPRESS_PHOTO_MAXSIZE = "intent_key_compress_photo_maxsize";
     public static final String INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL = "intent_key_compress_photo_maxpixel";
@@ -105,17 +118,17 @@ public class PictureActivity extends TakePhotoActivity {
 
     public String fileExtensionName = ImgTypeUtils.IMG_TYPE_IMGJ;
     private String tempPhotoPath;
-    private int maxSizeCompress = 2 * 1024 * 1024;
-    private int maxPixelCompress = 540;
+    private int maxSizeCompress = -1;
+    private int maxPixelCompress = -1;
 
     private TextView tvCamer, tvSelPic, tvCancel;
     private boolean isCompressImg;
-
+    private boolean enableCuscompress = false;
+    private ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_picture_layout);
-
 
         photoTmpPath = getIntent().getStringExtra(INTENT_KEY_PHOTO_TMP_PATH_DIR);
 
@@ -132,8 +145,10 @@ public class PictureActivity extends TakePhotoActivity {
 
 
         isCompressImg = getIntent().getBooleanExtra(INTENT_KEY_COMPRESS_PHOTO,false);
-        maxSizeCompress = getIntent().getIntExtra(INTENT_KEY_COMPRESS_PHOTO_MAXSIZE,2 * 1024 * 1024);
-        maxPixelCompress = getIntent().getIntExtra(INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,540);
+        enableCuscompress = getIntent().getBooleanExtra(INTENT_KEY_ENABLE_CUSCOMPRESS,false);
+
+        maxSizeCompress = getIntent().getIntExtra(INTENT_KEY_COMPRESS_PHOTO_MAXSIZE,-1);
+        maxPixelCompress = getIntent().getIntExtra(INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,-1);
 
 
 
@@ -142,11 +157,6 @@ public class PictureActivity extends TakePhotoActivity {
         tvCamer = (TextView) findViewById(R.id.tv_camer);
         tvSelPic = (TextView) findViewById(R.id.tv_select_pic);
         tvCancel = (TextView) findViewById(R.id.tv_cancel);
-
-        if (isCompressImg){
-            CompressConfig config = new CompressConfig.Builder().setMaxSize(maxSizeCompress).setMaxPixel(maxPixelCompress).create();
-            takePhoto.onEnableCompress(config, true);
-        }
 
         tvCamer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,14 +211,63 @@ public class PictureActivity extends TakePhotoActivity {
 
 
     @Override
-    public void takeSuccess(TResult result) {
+    public void takeSuccess(final TResult result) {
         super.takeSuccess(result);
         if (result != null && result.getImage() != null) {
-            Intent intent = new Intent();
-            intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, result.getImage().getPath());
-            setResult(RESULT_OK, intent);
-            this.finish();
+            if (isCompressImg){
+                String largeImagePath = result.getImage().getPath();
+                String thumFilePath = photoTmpPath+System.currentTimeMillis()+fileExtensionName;
+                CompressParams params = new CompressParams();
+                params.setLargeImagePath(largeImagePath);
+                if (enableCuscompress){
+                    params.setEnableCusCompress(true);//开启自定义压缩模式
+                    if (maxSizeCompress > 0) //设置最大宽高
+                    params.setMaxPixel(maxSizeCompress);
+                    if (maxPixelCompress > 0) //设置最大文件大小限制
+                    params.setMaxPixel(maxPixelCompress);
+                }
+                if (!fileExtensionName.equals(largeImagePath.substring(largeImagePath.lastIndexOf(".")))){
+                    params.setThumbFilePath(thumFilePath);
+                }else {
+                    params.setThumbFilePath(largeImagePath);
+                }
 
+                CompressImpl compress = new CompressImpl(params);
+                compress.setCompressListener(new CompressListener() {
+                    @Override
+                    public void onStart() {
+                        mProgressDialog = new ProgressDialog(PictureActivity.this);
+                        mProgressDialog.setCancelable(false);
+                        mProgressDialog.show();
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
+                            mProgressDialog.dismiss();
+                        }
+                        Intent intent = new Intent();
+                        intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, file.getAbsolutePath());
+                        setResult(RESULT_OK, intent);
+                        PictureActivity.this.finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
+                            mProgressDialog.dismiss();
+                        }
+                        Toast.makeText(PictureActivity.this,"压缩失败",Toast.LENGTH_SHORT).show();
+                        Log.e(TAG,e.getMessage());
+                    }
+                });
+                compress.startCompress();
+            }else {
+                Intent intent = new Intent();
+                intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, result.getImage().getPath());
+                setResult(RESULT_OK, intent);
+                this.finish();
+            }
         }
     }
 
@@ -223,5 +282,18 @@ public class PictureActivity extends TakePhotoActivity {
 
     private CropOptions getCropOptions() {
         return new CropOptions.Builder().setAspectX(aspectX).setAspectY(aspectY).setOutputX(cropOutputX).setOutputY(cropOutputY).setWithOwnCrop(false).create();
+    }
+
+    public static ProgressDialog showProgressDialog(final Activity activity,
+                                                    String... progressTitle) {
+        if(activity==null||activity.isFinishing())return null;
+        String title = activity.getResources().getString(R.string.tip_tips);
+        if (progressTitle != null && progressTitle.length > 0)
+            title = progressTitle[0];
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setTitle(title);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        return progressDialog;
     }
 }
