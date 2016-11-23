@@ -19,7 +19,7 @@ TakephotoLib已经更新到[jitpack](https://jitpack.io/)上，使用AndroidStud
 
 **Step 2** 在App项目引用 <B>build.gradle</B> 中添加
 >     dependencies {
->             compile 'com.github.24kpk:TakePhotoLib:1.0.2'
+>             compile 'com.github.24kpk:TakePhotoLib:1.0.3'
 >     }
 
 
