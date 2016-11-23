@@ -54,11 +54,12 @@ public class PictureActivity extends TakePhotoActivity {
 
     /**
      * 裁切图片时 传入的裁剪参数
-     * 默认
+     * 默认 裁剪图片宽高比例1:1裁切
      * int aspectX=1
      * int aspectY=1
-     * int cropOutputX = 300
-     * int cropOutputY = 300
+     * int cropOutputX = -1
+     * int cropOutputY = -1
+     * 若 cropOutputX > 0 && cropOutputY > 0 按图片宽高(cropOutputX、cropOutputY)裁剪
      */
     public static final String INTENT_KEY_CUT_PHOTO_ASPECTX = "intent_key_cut_photo_aspectX";
     public static final String INTENT_KEY_CUT_PHOTO_ASPECTY = "intent_key_cut_photo_aspectY";
@@ -112,8 +113,8 @@ public class PictureActivity extends TakePhotoActivity {
 
     private int aspectX = 1;
     private int aspectY = 1;
-    private int cropOutputX = 300;
-    private int cropOutputY = 300;
+    private int cropOutputX = -1;
+    private int cropOutputY = -1;
 
     public String fileExtensionName = ImgTypeUtils.IMG_TYPE_IMGJ;
     private String tempPhotoPath;
@@ -139,8 +140,8 @@ public class PictureActivity extends TakePhotoActivity {
         cutPhoto = getIntent().getBooleanExtra(INTENT_KEY_CAN_CUT_PHOTO, false);
         aspectX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTX, 1);
         aspectY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTY, 1);
-        cropOutputX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTX,300);
-        cropOutputY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTY,300);
+        cropOutputX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTX,-1);
+        cropOutputY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTY,-1);
 
 
         isCompressImg = getIntent().getBooleanExtra(INTENT_KEY_COMPRESS_PHOTO,false);
@@ -283,7 +284,14 @@ public class PictureActivity extends TakePhotoActivity {
     }
 
     private CropOptions getCropOptions() {
-        return new CropOptions.Builder().setAspectX(aspectX).setAspectY(aspectY).setOutputX(cropOutputX).setOutputY(cropOutputY).setWithOwnCrop(false).create();
+        CropOptions.Builder builder = null;
+
+        if (cropOutputX >0 && cropOutputY >0){
+            builder = new CropOptions.Builder().setOutputX(cropOutputX).setOutputY(cropOutputY).setWithOwnCrop(false);
+        }else {
+            builder = new CropOptions.Builder().setAspectX(aspectX).setAspectY(aspectY).setWithOwnCrop(false);
+        }
+        return builder.create();
     }
 
 }
