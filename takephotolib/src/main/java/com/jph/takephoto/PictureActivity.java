@@ -1,6 +1,5 @@
 package com.jph.takephoto;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -236,7 +235,9 @@ public class PictureActivity extends TakePhotoActivity {
                 compress.setCompressListener(new CompressListener() {
                     @Override
                     public void onStart() {
+                        String title = getResources().getString(R.string.tip_tips);
                         mProgressDialog = new ProgressDialog(PictureActivity.this);
+                        mProgressDialog.setTitle(title);
                         mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                     }
@@ -284,16 +285,4 @@ public class PictureActivity extends TakePhotoActivity {
         return new CropOptions.Builder().setAspectX(aspectX).setAspectY(aspectY).setOutputX(cropOutputX).setOutputY(cropOutputY).setWithOwnCrop(false).create();
     }
 
-    public static ProgressDialog showProgressDialog(final Activity activity,
-                                                    String... progressTitle) {
-        if(activity==null||activity.isFinishing())return null;
-        String title = activity.getResources().getString(R.string.tip_tips);
-        if (progressTitle != null && progressTitle.length > 0)
-            title = progressTitle[0];
-        ProgressDialog progressDialog = new ProgressDialog(activity);
-        progressDialog.setTitle(title);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        return progressDialog;
-    }
 }
