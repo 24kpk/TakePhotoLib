@@ -247,13 +247,13 @@ public class PictureActivity extends TakePhotoActivity {
 
                     @Override
                     public void onSuccess(File file) {
-//                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
-//                            mProgressDialog.dismiss();
-//                        }
-//                        Intent intent = new Intent();
-//                        intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, file.getAbsolutePath());
-//                        setResult(RESULT_OK, intent);
-//                        PictureActivity.this.finish();
+                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
+                            mProgressDialog.dismiss();
+                        }
+                        Intent intent = new Intent();
+                        intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, file.getAbsolutePath());
+                        setResult(RESULT_OK, intent);
+                        PictureActivity.this.finish();
                     }
 
                     @Override
