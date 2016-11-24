@@ -54,9 +54,9 @@ public class PictureActivity extends TakePhotoActivity {
 
     /**
      * 裁切图片时 传入的裁剪参数
-     * 默认 裁剪图片宽高比例1:1裁切
-     * int aspectX=1
-     * int aspectY=1
+     * 默认 裁剪图片宽高(任意)比例裁切
+     * int aspectX=0
+     * int aspectY=0
      * int cropOutputX = -1
      * int cropOutputY = -1
      * 若 cropOutputX > 0 && cropOutputY > 0 按图片宽高(cropOutputX、cropOutputY)裁剪
@@ -138,8 +138,8 @@ public class PictureActivity extends TakePhotoActivity {
         }
 
         cutPhoto = getIntent().getBooleanExtra(INTENT_KEY_CAN_CUT_PHOTO, false);
-        aspectX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTX, 1);
-        aspectY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTY, 1);
+        aspectX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTX, 0);
+        aspectY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_ASPECTY, 0);
         cropOutputX = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTX,-1);
         cropOutputY = getIntent().getIntExtra(INTENT_KEY_CUT_PHOTO_OUTPUTY,-1);
 
@@ -288,8 +288,10 @@ public class PictureActivity extends TakePhotoActivity {
 
         if (cropOutputX >0 && cropOutputY >0){
             builder = new CropOptions.Builder().setOutputX(cropOutputX).setOutputY(cropOutputY).setWithOwnCrop(false);
-        }else {
+        }else if (aspectX > 0 && aspectY > 0){
             builder = new CropOptions.Builder().setAspectX(aspectX).setAspectY(aspectY).setWithOwnCrop(false);
+        }else {
+            builder = new CropOptions.Builder().setWithOwnCrop(false);
         }
         return builder.create();
     }

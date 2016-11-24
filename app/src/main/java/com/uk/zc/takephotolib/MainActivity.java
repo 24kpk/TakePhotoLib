@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 //是否裁切图片 默认不裁切
                 intent.putExtra(PictureActivity.INTENT_KEY_CAN_CUT_PHOTO,true);
 
-                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTX,50);
-                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTY,60);
+//                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTX,50);
+//                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTY,60);
                 //设置拍照或裁切图片的输出文件格式
                 //intent.putExtra(PictureActivity.INTENT_KEY_PHOTO_TMP_EXT_NAME, ImgTypeUtils.IMG_TYPE_JPG);
                 //设置压缩 默认不压缩
