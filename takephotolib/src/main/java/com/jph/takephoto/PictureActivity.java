@@ -1,6 +1,6 @@
 package com.jph.takephoto;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -124,7 +124,7 @@ public class PictureActivity extends TakePhotoActivity {
     private TextView tvCamer, tvSelPic, tvCancel;
     private boolean isCompressImg;
     private boolean enableCuscompress = false;
-    private ProgressDialog mProgressDialog;
+    private Dialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,23 +236,24 @@ public class PictureActivity extends TakePhotoActivity {
                 compress.setCompressListener(new CompressListener() {
                     @Override
                     public void onStart() {
-                        String title = getResources().getString(R.string.tip_tips);
-                        mProgressDialog = new ProgressDialog(PictureActivity.this);
-                        mProgressDialog.setTitle(title);
-                        mProgressDialog.setMessage(getResources().getString(R.string.tip_compress));
+                        mProgressDialog = new Dialog(PictureActivity.this,R.style.xProgress_dialog);
+                        mProgressDialog.setContentView(R.layout.com_picture_dialog_layout);
+                        mProgressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        TextView msg = (TextView) mProgressDialog.findViewById(R.id.id_tv_loadingmsg);
+                        msg.setText(getResources().getString(R.string.tip_compress));
                         mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                     }
 
                     @Override
                     public void onSuccess(File file) {
-                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
-                            mProgressDialog.dismiss();
-                        }
-                        Intent intent = new Intent();
-                        intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, file.getAbsolutePath());
-                        setResult(RESULT_OK, intent);
-                        PictureActivity.this.finish();
+//                        if (mProgressDialog!=null && mProgressDialog.isShowing()){
+//                            mProgressDialog.dismiss();
+//                        }
+//                        Intent intent = new Intent();
+//                        intent.putExtra(INTENT_KEY_RETURN_SAVE_PATH, file.getAbsolutePath());
+//                        setResult(RESULT_OK, intent);
+//                        PictureActivity.this.finish();
                     }
 
                     @Override
