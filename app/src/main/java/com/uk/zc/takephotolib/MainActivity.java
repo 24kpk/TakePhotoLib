@@ -50,19 +50,19 @@ public class MainActivity extends AppCompatActivity {
                 //必须传入的输出临时文件夹路径
                 intent.putExtra(PictureActivity.INTENT_KEY_PHOTO_TMP_PATH_DIR,ROOT_PATH+"/tmp/");
                 //是否裁切图片 默认不裁切
-                intent.putExtra(PictureActivity.INTENT_KEY_CAN_CUT_PHOTO,true);
+//                intent.putExtra(PictureActivity.INTENT_KEY_CAN_CUT_PHOTO,true);
 
 //                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTX,50);
 //                intent.putExtra(PictureActivity.INTENT_KEY_CUT_PHOTO_OUTPUTY,60);
                 //设置拍照或裁切图片的输出文件格式
                 //intent.putExtra(PictureActivity.INTENT_KEY_PHOTO_TMP_EXT_NAME, ImgTypeUtils.IMG_TYPE_JPG);
                 //设置压缩 默认不压缩
-                //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO,true);
+                intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO,true);
 
                 //启用自定义压缩方式
-                //intent.putExtra(PictureActivity.INTENT_KEY_ENABLE_CUSCOMPRESS,true);
+                intent.putExtra(PictureActivity.INTENT_KEY_ENABLE_CUSCOMPRESS,true);
                 //限制最大宽高 单位PX
-                //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,600);
+                intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,600);
                 //限制压缩后文件大小 建议不设置
                 //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXSIZE,2*1024);
                 startActivityForResult(intent, AVATAR_REQUEST_CODE);

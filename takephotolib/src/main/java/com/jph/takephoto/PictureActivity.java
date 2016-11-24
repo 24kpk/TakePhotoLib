@@ -100,7 +100,7 @@ public class PictureActivity extends TakePhotoActivity {
 
     /**
      * 压缩参数
-     * 默认 maxSizeCompress = -1; //设置文件质量限制2M setMaxSize(maxSize) 传入参数单位KB
+     * 默认 maxSizeCompress = -1; //设置文件质量限制 setMaxSize(maxSize) 传入参数单位KB
      * 默认 maxPixelCompress = -1 ;//宽高不超过maxPixel px
      */
     public static final String INTENT_KEY_COMPRESS_PHOTO_MAXSIZE = "intent_key_compress_photo_maxsize";
@@ -222,7 +222,7 @@ public class PictureActivity extends TakePhotoActivity {
                 if (enableCuscompress){
                     params.setEnableCusCompress(true);//开启自定义压缩模式
                     if (maxSizeCompress > 0) //设置最大宽高
-                    params.setMaxPixel(maxSizeCompress);
+                    params.setMaxSize(maxSizeCompress);
                     if (maxPixelCompress > 0) //设置最大文件大小限制
                     params.setMaxPixel(maxPixelCompress);
                 }
