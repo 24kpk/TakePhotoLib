@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,6 +131,8 @@ public class PictureActivity extends TakePhotoActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_picture_layout);
+        getWindow().setGravity(Gravity.BOTTOM);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         photoTmpPath = getIntent().getStringExtra(INTENT_KEY_PHOTO_TMP_PATH_DIR);
 

@@ -190,63 +190,10 @@ public class CompressImpl {
                 }
                 return compress(filePath, thumbFilePath, thumbW, thumbH, angle, (long) size);
 
-//                if (width >= height && width > maxSize) {//缩放比,用高或者宽其中较大的一个数据进行计算
-//                    be = (int) (newOpts.outWidth / maxSize);
-//                    be++;
-//                } else if (width < height && height > maxSize) {
-//                    be = (int) (newOpts.outHeight / maxSize);
-//                    be++;
-//                }
             }
         }
 
         return compress(filePath, thumbFilePath, thumbW, thumbH, angle, (long) size);
-        /*
-        width = thumbW > thumbH ? thumbH : thumbW;
-        height = thumbW > thumbH ? thumbW : thumbH;
-
-
-
-        if (scale <= 1 && scale > 0.5625) {
-            if (height < 1664) {
-                if (file.length() / 1024 < 150) return file;
-
-                size = (width * height) / Math.pow(1664, 2) * 150;
-                size = size < 60 ? 60 : size;
-            } else if (height >= 1664 && height < 4990) {
-                thumbW = width / 2;
-                thumbH = height / 2;
-                size = (thumbW * thumbH) / Math.pow(2495, 2) * 300;
-                size = size < 60 ? 60 : size;
-            } else if (height >= 4990 && height < 10240) {
-                thumbW = width / 4;
-                thumbH = height / 4;
-                size = (thumbW * thumbH) / Math.pow(2560, 2) * 300;
-                size = size < 100 ? 100 : size;
-            } else {
-                int multiple = height / 1280 == 0 ? 1 : height / 1280;
-                thumbW = width / multiple;
-                thumbH = height / multiple;
-                size = (thumbW * thumbH) / Math.pow(2560, 2) * 300;
-                size = size < 100 ? 100 : size;
-            }
-        } else if (scale <= 0.5625 && scale > 0.5) {
-            if (height < 1280 && file.length() / 1024 < 200) return file;
-
-            int multiple = height / 1280 == 0 ? 1 : height / 1280;
-            thumbW = width / multiple;
-            thumbH = height / multiple;
-            size = (thumbW * thumbH) / (1440.0 * 2560.0) * 400;
-            size = size < 100 ? 100 : size;
-        } else {
-            int multiple = (int) Math.ceil(height / (1280.0 / scale));
-            thumbW = width / multiple;
-            thumbH = height / multiple;
-            size = ((thumbW * thumbH) / (1280.0 * (1280 / scale))) * 500;
-            size = size < 100 ? 100 : size;
-        }
-        return compress(filePath, thumbFilePath, thumbW, thumbH, angle, (long) size);
-        */
     }
 
 
