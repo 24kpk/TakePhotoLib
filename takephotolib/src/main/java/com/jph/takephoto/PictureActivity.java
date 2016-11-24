@@ -28,7 +28,7 @@ import java.io.File;
 /**
  * author: C_CHEUNG
  * created on: 2016/11/15
- * description: 处理拍照、选择本地图片的界面
+ * description: 处理拍照、选择本地图片的界面 (单选图片、裁切、压缩)
  * 注意：必须指定输出的文件夹路径 文件名默认为  photoTmpPath + System.currentTimeMillis() + ImgTypeUtils.IMG_TYPE_JPG
  */
 public class PictureActivity extends TakePhotoActivity {
