@@ -4,17 +4,19 @@
     <style name="xProgress_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:background">@null</item>
         <item name="android:windowBackground">@null</item>
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <!--透明的Activity theme ，类似Dialog-->
     <style name="xDialogActivity.Transparent" parent="Base.Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
