@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         fileSize = (TextView) findViewById(R.id.file_size);
         imageSize = (TextView) findViewById(R.id.image_size);
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         thumbImageSize = (TextView) findViewById(R.id.thumb_image_size);
         image = (ImageView) findViewById(R.id.image);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Button fab = (Button) findViewById(R.id.fab);
 
         final String ROOT_PATH = String.format("%s%s", Environment.getExternalStorageDirectory().toString(), "/TEST_PHOTO/");
 
@@ -57,12 +54,12 @@ public class MainActivity extends AppCompatActivity {
                 //设置拍照或裁切图片的输出文件格式
                 //intent.putExtra(PictureActivity.INTENT_KEY_PHOTO_TMP_EXT_NAME, ImgTypeUtils.IMG_TYPE_JPG);
                 //设置压缩 默认不压缩
-                intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO,true);
+                //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO,true);
 
                 //启用自定义压缩方式
-                intent.putExtra(PictureActivity.INTENT_KEY_ENABLE_CUSCOMPRESS,true);
+                //intent.putExtra(PictureActivity.INTENT_KEY_ENABLE_CUSCOMPRESS,true);
                 //限制最大宽高 单位PX
-                intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,600);
+                //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXPIXEL,600);
                 //限制压缩后文件大小 建议不设置
                 //intent.putExtra(PictureActivity.INTENT_KEY_COMPRESS_PHOTO_MAXSIZE,2*1024);
                 startActivityForResult(intent, AVATAR_REQUEST_CODE);
